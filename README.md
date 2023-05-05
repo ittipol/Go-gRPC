@@ -1,8 +1,8 @@
 # VScode extension
 
-Open [http://localhost:3000](http://localhost:3000)
+`` vscode-proto3 ``
 
 
 # Protocol Buffers Documentation
 
-Open [http://localhost:3000](http://localhost:3000)
+[Language Guide (proto 3)](https://protobuf.dev/programming-guides/proto3/)
