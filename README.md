@@ -6,6 +6,7 @@
     - Directories section > cmd > click protoc-gen-go [1]
 - [1] protoc-gen-go [https://pkg.go.dev/google.golang.org/protobuf@v1.30.0/cmd/protoc-gen-go](https://pkg.go.dev/google.golang.org/protobuf@v1.30.0/cmd/protoc-gen-go)
 - protoc-gen-go-grpc [https://pkg.go.dev/google.golang.org/grpc/cmd/protoc-gen-go-grpc](https://pkg.go.dev/google.golang.org/grpc/cmd/protoc-gen-go-grpc)
+- grpc [https://pkg.go.dev/google.golang.org/grpc](https://pkg.go.dev/google.golang.org/grpc)
 
 ``` bash
 # Install protoc-gen-go package
@@ -13,6 +14,9 @@ go get google.golang.org/protobuf/cmd/protoc-gen-go
 
 # Install protoc-gen-go-grpc package
 go get google.golang.org/grpc/cmd/protoc-gen-go-grpc
+
+# Install grpc package
+go get google.golang.org/grpc
 ```
 
 ## Install gRPC tool
@@ -23,7 +27,7 @@ go install google.golang.org/protobuf/cmd/protoc-gen-go
 go install google.golang.org/grpc/cmd/protoc-gen-go-grpc
 
 # Check tool installed
-cd cd $(go env GOPATH)/bin
+cd $(go env GOPATH)/bin
 
 find . -name "protoc-*"
 ```
@@ -32,8 +36,15 @@ find . -name "protoc-*"
 ``` bash
 $ export PATH=$PATH:$(go env GOPATH)/bin
 
-# check
-printenv
+# check PATH environment variable
+printenv PATH
+```
+
+## Build Protocol Buffer
+``` bash
+protoc calculator.proto --go_out=../server
+
+protoc calculator.proto --go_out=../server --go-grpc_out=../server
 ```
 
 ## Protocol Buffers
