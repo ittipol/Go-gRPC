@@ -1,12 +1,40 @@
 # Go programming language - gRPC
 
-## VScode extension
+## Packages
 
-`` vscode-proto3 ``
+- protobuf [https://pkg.go.dev/google.golang.org/protobuf#section-directories](https://pkg.go.dev/google.golang.org/protobuf#section-directories)
+    - Directories section > cmd > click protoc-gen-go [1]
+- [1] protoc-gen-go [https://pkg.go.dev/google.golang.org/protobuf@v1.30.0/cmd/protoc-gen-go](https://pkg.go.dev/google.golang.org/protobuf@v1.30.0/cmd/protoc-gen-go)
+- protoc-gen-go-grpc [https://pkg.go.dev/google.golang.org/grpc/cmd/protoc-gen-go-grpc](https://pkg.go.dev/google.golang.org/grpc/cmd/protoc-gen-go-grpc)
 
-## Protocol Buffers Documentation
+``` bash
+# Install protoc-gen-go package
+go get google.golang.org/protobuf/cmd/protoc-gen-go
 
-[Language Guide (proto 3)](https://protobuf.dev/programming-guides/proto3/)
+# Install protoc-gen-go-grpc package
+go get google.golang.org/grpc/cmd/protoc-gen-go-grpc
+```
+
+## Install gRPC tool
+
+``` bash
+go install google.golang.org/protobuf/cmd/protoc-gen-go
+
+go install google.golang.org/grpc/cmd/protoc-gen-go-grpc
+
+# Check tool installed
+cd cd $(go env GOPATH)/bin
+
+find . -name "protoc-*"
+```
+
+## Add the workspace's bin subdirectory to your PATH
+``` bash
+$ export PATH=$PATH:$(go env GOPATH)/bin
+
+# check
+printenv
+```
 
 ## Protocol Buffers
 
@@ -36,3 +64,11 @@ Solution 2. Add Public DNS IP addresses
 
 Solution 3. Disable IPv6
 - Go to System Preferences > Network  > TCP/IP > Change Configure IPv6 to Link-local only
+
+## VScode extension
+
+- vscode-proto3
+
+## Protocol Buffers Documentation
+
+[Language Guide (proto 3)](https://protobuf.dev/programming-guides/proto3/)
