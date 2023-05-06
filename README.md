@@ -40,18 +40,7 @@ $ export PATH=$PATH:$(go env GOPATH)/bin
 printenv PATH
 ```
 
-## Build Protocol Buffer
-``` bash
-protoc calculator.proto --go_out=../server
-
-protoc calculator.proto --go_out=../server --go-grpc_out=../server
-```
-
-## Protocol Buffers
-
-Protocol Buffers Release - [https://github.com/protocolbuffers/protobuf/releases](https://github.com/protocolbuffers/protobuf/releases)
-
-## Install protoc command
+## Install protoc CLI
 [https://github.com/protocolbuffers/protobuf/releases](https://github.com/protocolbuffers/protobuf/releases)
 ``` bash
 #mac os
@@ -60,6 +49,46 @@ brew install protobuf
 # Check version
 protoc --version
 ```
+
+## Build Protocol Buffer
+``` bash
+protoc account.proto --go_out=../server
+
+protoc account.proto --go_out=../server --go-grpc_out=../server
+```
+
+## Install Evans gRPC client
+### 1. macOS
+``` bash
+brew tap ktr0731/evans
+brew install evans
+```
+### 2. Docker image
+[https://github.com/ktr0731/evans/pkgs/container/evans](https://github.com/ktr0731/evans/pkgs/container/evans)
+``` bash
+$ docker run --rm -v "$(pwd):/mount:ro" \
+    ghcr.io/ktr0731/evans:latest \
+      --path ./proto/files \
+      --proto file-name.proto \
+      --host example.com \
+      --port 50051 \
+      repl
+```
+
+## Evans gRPC command
+``` bash
+# enter to Evans gRPC client
+evans --path=./proto --proto=account.proto
+
+# list of services
+show service
+
+# call RPC
+call <RPC Name>
+```
+
+## Protocol Buffers
+Protocol Buffers Release - [https://github.com/protocolbuffers/protobuf/releases](https://github.com/protocolbuffers/protobuf/releases)
 
 ## Fix brew error
 

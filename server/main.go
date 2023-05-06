@@ -11,6 +11,7 @@ import (
 func main() {
 	// Start gRPC Server
 	server := grpc.NewServer()
+	defer server.Stop()
 
 	listener, err := net.Listen("tcp", ":50051")
 
@@ -18,8 +19,8 @@ func main() {
 		panic(err)
 	}
 
-	srv := services.NewCalculatorServer()
-	services.RegisterCalculatorServer(server, srv)
+	srv := services.NewAccountServer()
+	services.RegisterAccountServer(server, srv)
 
 	fmt.Println("gRPC server start")
 	err = server.Serve(listener)

@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package services;
+option go_package = "./services";
+
+service Account {
+    rpc User (UserRequest) returns (UserResponse);
+}
+
+message UserRequest {
+    // type var_name = tag
+    // tag start from 1...n
+    string name = 1;
+}
+
+message UserResponse {
+    // type var_name = tag
+    string result = 1;
+}
+
+message Person {
+    // declare slice var
+    repeated string hobbies = 1;
+    int32 phone_number = 2;
+    Gender Gender = 3;
+}
+
+enum Gender {
+    Undefined = 0;
+    Male = 1;
+    Femail = 2;
+}
