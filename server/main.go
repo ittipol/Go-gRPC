@@ -6,6 +6,7 @@ import (
 	"server/services"
 
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 )
 
 func main() {
@@ -19,8 +20,12 @@ func main() {
 		panic(err)
 	}
 
-	srv := services.NewAccountServer()
-	services.RegisterAccountServer(server, srv)
+	svc := services.NewAccountServer()
+	services.RegisterAccountServer(server, svc)
+	// Set reflection
+	// usage
+	// evans --reflection
+	reflection.Register(server)
 
 	fmt.Println("gRPC server start")
 	err = server.Serve(listener)

@@ -106,9 +106,13 @@ Solution 3. Disable IPv6
 - Go to System Preferences > Network  > TCP/IP > Change Configure IPv6 to Link-local only
 
 ## VScode extension
-
 - vscode-proto3
 
 ## Protocol Buffers Documentation
+- Language Guide (proto 3) https://protobuf.dev/programming-guides/proto3/
+- JSON Mapping https://protobuf.dev/programming-guides/proto3/#json
 
-[Language Guide (proto 3)](https://protobuf.dev/programming-guides/proto3/)
+
+## Protocol Buffers - Google's data interchange format
+https://github.com/protocolbuffers/protobuf
+- Library https://github.com/protocolbuffers/protobuf/tree/main/src/google/protobuf

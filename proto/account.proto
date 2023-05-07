@@ -1,32 +1,55 @@
 syntax = "proto3";
 
+import "gender.proto";
+// import timestamp.proto
+// import from https://github.com/protocolbuffers/protobuf/tree/main/src/google/protobuf
+import "google/protobuf/timestamp.proto";
+
 package services;
 option go_package = "./services";
 
 service Account {
-    rpc User (UserRequest) returns (UserResponse);
+    rpc User (UserRequest) returns (UserResponse); // rpc type "Unary"
+    rpc Fibonacci (FibonacciRequest) returns (stream FibonacciResponse); // rpc type "Streaming"
 }
 
 message UserRequest {
     // type var_name = tag
+    // tag is important than var_name
     // tag start from 1...n
+    reserved 2;
+    reserved "age";
     string name = 1;
+    google.protobuf.Timestamp created_date = 3;
 }
 
 message UserResponse {
     // type var_name = tag
     string result = 1;
+    google.protobuf.Timestamp created_date = 2;
 }
 
 message Person {
-    // declare slice var
+    // declare slice, array
     repeated string hobbies = 1;
-    int32 phone_number = 2;
-    Gender Gender = 3;
+    // declare map, list
+    map<string,string> currency = 2;
+    int32 phone_number = 3;
+    Gender Gender = 4;
+    uint32 age = 5;
+    sint32 balance = 6;
+
+    // Use Timestamp from library
+    // open timestamp.proto file
+    // see package name and message
+    // format => {package}.{message}
+    google.protobuf.Timestamp datetime = 7;
 }
 
-enum Gender {
-    Undefined = 0;
-    Male = 1;
-    Femail = 2;
+message FibonacciRequest {
+    uint32 n = 1;
+}
+
+message FibonacciResponse {
+    uint32 result = 1;
 }

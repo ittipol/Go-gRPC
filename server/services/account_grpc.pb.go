@@ -19,7 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Account_User_FullMethodName = "/services.Account/User"
+	Account_User_FullMethodName      = "/services.Account/User"
+	Account_Fibonacci_FullMethodName = "/services.Account/Fibonacci"
 )
 
 // AccountClient is the client API for Account service.
@@ -27,6 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AccountClient interface {
 	User(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*UserResponse, error)
+	Fibonacci(ctx context.Context, in *FibonacciRequest, opts ...grpc.CallOption) (Account_FibonacciClient, error)
 }
 
 type accountClient struct {
@@ -46,11 +48,44 @@ func (c *accountClient) User(ctx context.Context, in *UserRequest, opts ...grpc.
 	return out, nil
 }
 
+func (c *accountClient) Fibonacci(ctx context.Context, in *FibonacciRequest, opts ...grpc.CallOption) (Account_FibonacciClient, error) {
+	stream, err := c.cc.NewStream(ctx, &Account_ServiceDesc.Streams[0], Account_Fibonacci_FullMethodName, opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &accountFibonacciClient{stream}
+	if err := x.ClientStream.SendMsg(in); err != nil {
+		return nil, err
+	}
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	return x, nil
+}
+
+type Account_FibonacciClient interface {
+	Recv() (*FibonacciResponse, error)
+	grpc.ClientStream
+}
+
+type accountFibonacciClient struct {
+	grpc.ClientStream
+}
+
+func (x *accountFibonacciClient) Recv() (*FibonacciResponse, error) {
+	m := new(FibonacciResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // AccountServer is the server API for Account service.
 // All implementations must embed UnimplementedAccountServer
 // for forward compatibility
 type AccountServer interface {
 	User(context.Context, *UserRequest) (*UserResponse, error)
+	Fibonacci(*FibonacciRequest, Account_FibonacciServer) error
 	mustEmbedUnimplementedAccountServer()
 }
 
@@ -60,6 +95,9 @@ type UnimplementedAccountServer struct {
 
 func (UnimplementedAccountServer) User(context.Context, *UserRequest) (*UserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method User not implemented")
+}
+func (UnimplementedAccountServer) Fibonacci(*FibonacciRequest, Account_FibonacciServer) error {
+	return status.Errorf(codes.Unimplemented, "method Fibonacci not implemented")
 }
 func (UnimplementedAccountServer) mustEmbedUnimplementedAccountServer() {}
 
@@ -92,6 +130,27 @@ func _Account_User_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Account_Fibonacci_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(FibonacciRequest)
+	if err := stream.RecvMsg(m); err != nil {
+		return err
+	}
+	return srv.(AccountServer).Fibonacci(m, &accountFibonacciServer{stream})
+}
+
+type Account_FibonacciServer interface {
+	Send(*FibonacciResponse) error
+	grpc.ServerStream
+}
+
+type accountFibonacciServer struct {
+	grpc.ServerStream
+}
+
+func (x *accountFibonacciServer) Send(m *FibonacciResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
 // Account_ServiceDesc is the grpc.ServiceDesc for Account service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -104,6 +163,12 @@ var Account_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Account_User_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "Fibonacci",
+			Handler:       _Account_Fibonacci_Handler,
+			ServerStreams: true,
+		},
+	},
 	Metadata: "account.proto",
 }

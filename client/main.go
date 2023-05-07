@@ -19,10 +19,10 @@ func main() {
 	}
 
 	accountClient := services.NewAccountClient(cc)
-
 	accountService := services.NewAccountService(accountClient)
 
-	err = accountService.User("ABBBDDDD")
+	// err = accountService.User("New User")
+	err = accountService.Fibonacci(5)
 
 	if err != nil {
 		panic(err)
