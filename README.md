@@ -40,6 +40,35 @@ $ export PATH=$PATH:$(go env GOPATH)/bin
 printenv PATH
 ```
 
+## Setting the PATH Variable Permanently
+- For older macOS versions (before Catalina): bash (.bashrc or .bash_profile)
+- For macOS Catalina and later: zsh (.zshrc or .zsh_profile)
+``` bash
+#For bash
+touch ~/.bash_profile
+touch ~/.bashrc
+#For zsh:
+touch ~/.zsh_profile
+touch ~/.zshrc
+
+# open text editor
+nano ~/.bash_profile
+# user vscode
+code ~/.bash_profile
+
+# add path and save
+export PATH=${PATH}:$(go env GOPATH)/bin
+
+# apply the changes 
+source ~/.bashrc
+# or
+source ~/.bash_profile
+# or
+source ~/.zshrc
+# or
+source ~/.zsh_profile
+```
+
 ## Install protoc CLI
 [https://github.com/protocolbuffers/protobuf/releases](https://github.com/protocolbuffers/protobuf/releases)
 ``` bash

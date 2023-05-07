@@ -1,0 +1,3 @@
+server use
+- server.crt
+- server.pem

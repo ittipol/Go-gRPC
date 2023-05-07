@@ -21,14 +21,22 @@ const _ = grpc.SupportPackageIsVersion7
 const (
 	Account_User_FullMethodName      = "/services.Account/User"
 	Account_Fibonacci_FullMethodName = "/services.Account/Fibonacci"
+	Account_Average_FullMethodName   = "/services.Account/Average"
+	Account_Sum_FullMethodName       = "/services.Account/Sum"
 )
 
 // AccountClient is the client API for Account service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AccountClient interface {
+	// rpc type "Unary"
 	User(ctx context.Context, in *UserRequest, opts ...grpc.CallOption) (*UserResponse, error)
+	// rpc type "Server Streaming"
 	Fibonacci(ctx context.Context, in *FibonacciRequest, opts ...grpc.CallOption) (Account_FibonacciClient, error)
+	// rpc type "Client Streaming"
+	Average(ctx context.Context, opts ...grpc.CallOption) (Account_AverageClient, error)
+	// rpc type "Bi Diretional Streaming"
+	Sum(ctx context.Context, opts ...grpc.CallOption) (Account_SumClient, error)
 }
 
 type accountClient struct {
@@ -80,12 +88,83 @@ func (x *accountFibonacciClient) Recv() (*FibonacciResponse, error) {
 	return m, nil
 }
 
+func (c *accountClient) Average(ctx context.Context, opts ...grpc.CallOption) (Account_AverageClient, error) {
+	stream, err := c.cc.NewStream(ctx, &Account_ServiceDesc.Streams[1], Account_Average_FullMethodName, opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &accountAverageClient{stream}
+	return x, nil
+}
+
+type Account_AverageClient interface {
+	Send(*AverageRequest) error
+	CloseAndRecv() (*AvereageResponse, error)
+	grpc.ClientStream
+}
+
+type accountAverageClient struct {
+	grpc.ClientStream
+}
+
+func (x *accountAverageClient) Send(m *AverageRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *accountAverageClient) CloseAndRecv() (*AvereageResponse, error) {
+	if err := x.ClientStream.CloseSend(); err != nil {
+		return nil, err
+	}
+	m := new(AvereageResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func (c *accountClient) Sum(ctx context.Context, opts ...grpc.CallOption) (Account_SumClient, error) {
+	stream, err := c.cc.NewStream(ctx, &Account_ServiceDesc.Streams[2], Account_Sum_FullMethodName, opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &accountSumClient{stream}
+	return x, nil
+}
+
+type Account_SumClient interface {
+	Send(*SumRequest) error
+	Recv() (*SumResponse, error)
+	grpc.ClientStream
+}
+
+type accountSumClient struct {
+	grpc.ClientStream
+}
+
+func (x *accountSumClient) Send(m *SumRequest) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *accountSumClient) Recv() (*SumResponse, error) {
+	m := new(SumResponse)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // AccountServer is the server API for Account service.
 // All implementations must embed UnimplementedAccountServer
 // for forward compatibility
 type AccountServer interface {
+	// rpc type "Unary"
 	User(context.Context, *UserRequest) (*UserResponse, error)
+	// rpc type "Server Streaming"
 	Fibonacci(*FibonacciRequest, Account_FibonacciServer) error
+	// rpc type "Client Streaming"
+	Average(Account_AverageServer) error
+	// rpc type "Bi Diretional Streaming"
+	Sum(Account_SumServer) error
 	mustEmbedUnimplementedAccountServer()
 }
 
@@ -98,6 +177,12 @@ func (UnimplementedAccountServer) User(context.Context, *UserRequest) (*UserResp
 }
 func (UnimplementedAccountServer) Fibonacci(*FibonacciRequest, Account_FibonacciServer) error {
 	return status.Errorf(codes.Unimplemented, "method Fibonacci not implemented")
+}
+func (UnimplementedAccountServer) Average(Account_AverageServer) error {
+	return status.Errorf(codes.Unimplemented, "method Average not implemented")
+}
+func (UnimplementedAccountServer) Sum(Account_SumServer) error {
+	return status.Errorf(codes.Unimplemented, "method Sum not implemented")
 }
 func (UnimplementedAccountServer) mustEmbedUnimplementedAccountServer() {}
 
@@ -151,6 +236,58 @@ func (x *accountFibonacciServer) Send(m *FibonacciResponse) error {
 	return x.ServerStream.SendMsg(m)
 }
 
+func _Account_Average_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(AccountServer).Average(&accountAverageServer{stream})
+}
+
+type Account_AverageServer interface {
+	SendAndClose(*AvereageResponse) error
+	Recv() (*AverageRequest, error)
+	grpc.ServerStream
+}
+
+type accountAverageServer struct {
+	grpc.ServerStream
+}
+
+func (x *accountAverageServer) SendAndClose(m *AvereageResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *accountAverageServer) Recv() (*AverageRequest, error) {
+	m := new(AverageRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+func _Account_Sum_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(AccountServer).Sum(&accountSumServer{stream})
+}
+
+type Account_SumServer interface {
+	Send(*SumResponse) error
+	Recv() (*SumRequest, error)
+	grpc.ServerStream
+}
+
+type accountSumServer struct {
+	grpc.ServerStream
+}
+
+func (x *accountSumServer) Send(m *SumResponse) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *accountSumServer) Recv() (*SumRequest, error) {
+	m := new(SumRequest)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
 // Account_ServiceDesc is the grpc.ServiceDesc for Account service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -168,6 +305,17 @@ var Account_ServiceDesc = grpc.ServiceDesc{
 			StreamName:    "Fibonacci",
 			Handler:       _Account_Fibonacci_Handler,
 			ServerStreams: true,
+		},
+		{
+			StreamName:    "Average",
+			Handler:       _Account_Average_Handler,
+			ClientStreams: true,
+		},
+		{
+			StreamName:    "Sum",
+			Handler:       _Account_Sum_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
 		},
 	},
 	Metadata: "account.proto",

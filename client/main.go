@@ -2,9 +2,11 @@ package main
 
 import (
 	"client/services"
+	"fmt"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/status"
 )
 
 func main() {
@@ -21,10 +23,19 @@ func main() {
 	accountClient := services.NewAccountClient(cc)
 	accountService := services.NewAccountService(accountClient)
 
-	// err = accountService.User("New User")
-	err = accountService.Fibonacci(5)
+	err = accountService.User("")
+	// err = accountService.Fibonacci(4)
+	// err = accountService.Average(3, 4, 5, 6, 7, 8, 9, 20, 100, 10000)
+	// err = accountService.Sum(3, 4, 5, 6, 7, 8, 9, 20, 100, 10000)
 
 	if err != nil {
+
+		if grpcError, ok := status.FromError(err); ok {
+			fmt.Printf("Is gRPC Error \n")
+			fmt.Printf("%v | %v | %v \n", grpcError.Code(), grpcError.Details(), grpcError.Message())
+			panic(grpcError)
+		}
+
 		panic(err)
 	}
 }

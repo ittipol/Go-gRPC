@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	// Start gRPC Server
+
 	server := grpc.NewServer()
 	defer server.Stop()
 
@@ -23,7 +23,7 @@ func main() {
 	svc := services.NewAccountServer()
 	services.RegisterAccountServer(server, svc)
 	// Set reflection
-	// usage
+	// usage command
 	// evans --reflection
 	reflection.Register(server)
 

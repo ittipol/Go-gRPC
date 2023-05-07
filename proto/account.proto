@@ -9,8 +9,14 @@ package services;
 option go_package = "./services";
 
 service Account {
-    rpc User (UserRequest) returns (UserResponse); // rpc type "Unary"
-    rpc Fibonacci (FibonacciRequest) returns (stream FibonacciResponse); // rpc type "Streaming"
+    // rpc type "Unary"
+    rpc User (UserRequest) returns (UserResponse);
+    // rpc type "Server Streaming"
+    rpc Fibonacci (FibonacciRequest) returns (stream FibonacciResponse);
+    // rpc type "Client Streaming"
+    rpc Average(stream AverageRequest) returns (AvereageResponse);
+    // rpc type "Bi Diretional Streaming"
+    rpc Sum(stream SumRequest) returns (stream SumResponse);
 }
 
 message UserRequest {
@@ -52,4 +58,20 @@ message FibonacciRequest {
 
 message FibonacciResponse {
     uint32 result = 1;
+}
+
+message AverageRequest {
+    double number = 1;
+}
+
+message AvereageResponse {
+    double value = 1;
+}
+
+message SumRequest {
+    double number = 1;
+}
+
+message SumResponse {
+    double result = 1;
 }
