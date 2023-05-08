@@ -27,8 +27,10 @@ go install google.golang.org/protobuf/cmd/protoc-gen-go
 go install google.golang.org/grpc/cmd/protoc-gen-go-grpc
 
 # Check tool installed
+# go to {GOPATH}/bin
 cd $(go env GOPATH)/bin
 
+# find
 find . -name "protoc-*"
 ```
 
