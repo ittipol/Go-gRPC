@@ -1,6 +1,6 @@
 # Go programming language - gRPC
 
-## Packages
+## Go Packages
 
 - protobuf [https://pkg.go.dev/google.golang.org/protobuf#section-directories](https://pkg.go.dev/google.golang.org/protobuf#section-directories)
     - Directories section > cmd > click protoc-gen-go [1]
@@ -43,6 +43,7 @@ printenv PATH
 ## Setting the PATH Variable Permanently
 - For older macOS versions (before Catalina): bash (.bashrc or .bash_profile)
 - For macOS Catalina and later: zsh (.zshrc or .zsh_profile)
+
 ``` bash
 #For bash
 touch ~/.bash_profile
@@ -51,9 +52,9 @@ touch ~/.bashrc
 touch ~/.zsh_profile
 touch ~/.zshrc
 
-# open text editor
+# open text editor nano
 nano ~/.bash_profile
-# user vscode
+# open text editor vscode
 code ~/.bash_profile
 
 # add path and save
@@ -140,7 +141,6 @@ Solution 3. Disable IPv6
 ## Protocol Buffers Documentation
 - Language Guide (proto 3) https://protobuf.dev/programming-guides/proto3/
 - JSON Mapping https://protobuf.dev/programming-guides/proto3/#json
-
 
 ## Protocol Buffers - Google's data interchange format
 https://github.com/protocolbuffers/protobuf
