@@ -1,0 +1,3 @@
+tls:
+  cert: ../tls/server.crt
+  key: ../tls/server.pem

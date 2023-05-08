@@ -18,9 +18,7 @@ WORKDIR /go-app
 COPY --from=build /go-app/app ./
 COPY --from=build /go-app/config.yaml ./
 
-ENV TLS_CERT=/app/tls/server.crt
-ENV TLS_KEY=/app/tls/server.pem
+ENV TLS_CERT=/app/tls/ca.crt
 
-EXPOSE 50051
-
-ENTRYPOINT ["./app","-tls"]
+# ENTRYPOINT ["./app"]
+CMD [ "tail", "-F", "anyfile" ]

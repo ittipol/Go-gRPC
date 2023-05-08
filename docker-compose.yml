@@ -2,31 +2,53 @@ version: "3.8"
 
 services:
 
+  client:
+    build: ./client
+    container_name: client
+    environment:
+      - TLS_CERT=/app/tls/ca.crt
+    volumes:
+      - app-volume:/app
+    depends_on:
+      - grpcserver
+
   grpcserver:
     build: ./server
-    container_name: gRPC Server
+    container_name: gRPC-Server
+    environment:
+      - TLS_CERT=/app/tls/server.crt
+      - TLS_KEY=/app/tls/server.pem
+    volumes:
+      - app-volume:/app
     ports:
       - 50051:50051
-    depends_on:
-      - mongo
 
-  mongo:
-    image: mongo
-    container_name: mongo
-    restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: 1234
+  # mongo:
+  #   image: mongo
+  #   container_name: mongo
+  #   restart: always
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: root
+  #     MONGO_INITDB_ROOT_PASSWORD: 1234
 
-  mongo-express:
-    image: mongo-express
-    container_name: mongo-express
-    restart: always
-    ports:
-      - 8081:8081
-    environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: 1234
-      ME_CONFIG_MONGODB_URL: mongodb://root:1234@mongo:27017/
-    depends_on:
-      - mongo
+  # mongo-express:
+  #   image: mongo-express
+  #   container_name: mongo-express
+  #   restart: always
+  #   ports:
+  #     - 8081:8081
+  #   environment:
+  #     ME_CONFIG_MONGODB_ADMINUSERNAME: root
+  #     ME_CONFIG_MONGODB_ADMINPASSWORD: 1234
+  #     ME_CONFIG_MONGODB_URL: mongodb://root:1234@mongo:27017/
+  #   depends_on:
+  #     - mongo
+
+  busybox:
+    build: ./tls
+    container_name: busybox
+    volumes:
+      - app-volume:/app
+
+volumes:
+  app-volume: 

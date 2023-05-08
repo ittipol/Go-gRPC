@@ -1,0 +1,14 @@
+Key & Certificate list
+- ca.key
+- ca.crt
+- server.key
+- server.pem
+- server.csr
+- server.crt
+
+Server use:
+- server.crt
+- server.pem
+
+Client use:
+- ca.crt

@@ -5,10 +5,10 @@ req_extensions = req_ext
 prompt = no
 
 [ dn ]
-CN = grpcserver
+CN = localhost
 
 [ req_ext ]
 subjectAltName = @alt_names
 
 [alt_names]
-DNS.1 = grpcserver
+DNS.1 = localhost
