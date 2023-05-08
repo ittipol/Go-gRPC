@@ -42,7 +42,7 @@ func main() {
 	if flag.Parsed() && *tls {
 		cert := viper.GetString("tls.cert")
 
-		fmt.Printf("CERT: %v \n", cert)
+		// fmt.Printf("CERT: %v \n", cert)
 
 		creds, err = credentials.NewClientTLSFromFile(cert, "")
 
@@ -62,10 +62,43 @@ func main() {
 	accountClient := services.NewAccountClient(cc)
 	accountService := services.NewAccountService(accountClient)
 
-	// err = accountService.User("Hello")
-	// err = accountService.Fibonacci(4)
-	err = accountService.Average(3, 4, 5, 6, 7, 8, 9, 20, 100, 10000)
-	// err = accountService.Sum(3, 4, 5, 6, 7, 8, 9, 20, 100, 10000)
+	var selected string
+	quit := false
+	for {
+		fmt.Println("1. Test gRPC \"Unary\"")
+		fmt.Println("2. Test gRPC \"Server Streaming\"")
+		fmt.Println("3. Test gRPC \"Client Streaming\"")
+		fmt.Println("4. Test gRPC \"Bidirectional Streaming\"")
+		fmt.Println("Input [1, 2, 3, 4]:")
+		fmt.Scanf("%s", &selected)
+
+		fmt.Printf("selected: %v \n", selected)
+
+		switch selected {
+		case "1":
+
+			var name string
+			fmt.Println("Input name:")
+			fmt.Scanf("%s", &name)
+
+			err = accountService.User(name)
+		case "2":
+			err = accountService.Fibonacci(4)
+		case "3":
+			err = accountService.Average(3, 4, 5, 6, 7, 8, 9, 20, 100, 10000, 1234)
+		case "4":
+			err = accountService.Sum(3, 4, 5, 6, 7, 8, 9, 20, 100, 10000, 9876)
+		default:
+			quit = true
+		}
+
+		if err != nil || quit {
+			fmt.Println("Exit")
+			break
+		}
+
+		fmt.Printf("\n\n")
+	}
 
 	if err != nil {
 

@@ -145,3 +145,20 @@ Solution 3. Disable IPv6
 ## Protocol Buffers - Google's data interchange format
 https://github.com/protocolbuffers/protobuf
 - Library https://github.com/protocolbuffers/protobuf/tree/main/src/google/protobuf
+
+## Start server and application
+``` bash
+docker compose up -d --build
+```
+
+## Test
+
+After server started, Run command
+
+``` bash
+# shell into container
+docker exec -it client /bin/sh
+
+# run client test
+./app -tls -host=grpcserver:50051
+```

@@ -33,7 +33,7 @@ func (c *accountService) User(name string) error {
 		return err
 	}
 
-	fmt.Printf("Response: %#v \n", response)
+	// fmt.Printf("Response: %#v \n", response)
 	fmt.Printf("Response: %#v \n", response.Result)
 
 	return nil

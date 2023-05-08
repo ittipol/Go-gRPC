@@ -15,7 +15,7 @@ service Account {
     rpc Fibonacci (FibonacciRequest) returns (stream FibonacciResponse);
     // rpc type "Client Streaming"
     rpc Average(stream AverageRequest) returns (AvereageResponse);
-    // rpc type "Bi Diretional Streaming"
+    // rpc type "Bidirectional Streaming"
     rpc Sum(stream SumRequest) returns (stream SumResponse);
 }
 
